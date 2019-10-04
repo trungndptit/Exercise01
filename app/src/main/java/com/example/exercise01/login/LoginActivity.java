@@ -1,86 +1,94 @@
 package com.example.exercise01.login;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
-import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.example.exercise01.R;
 import com.example.exercise01.base.BaseActivity;
-import com.example.exercise01.data.Login;
-import com.example.exercise01.data.LoginDataSource;
-import com.example.exercise01.data.LoginRepository;
+import com.example.exercise01.data.model.User;
+import com.example.exercise01.data.repository.UserRepository;
+import com.example.exercise01.data.source.local.UserLocalDataSource;
+import com.example.exercise01.data.source.remote.UserRemoteDataSource;
+import com.example.exercise01.util.StringUtils;
 
-public class LoginActivity extends AppCompatActivity implements LoginContract.View{
+public class LoginActivity extends BaseActivity implements LoginContract.View {
 
-    private LoginPresenter mLoginPresenter;
-    private LoginRepository mLoginDataSource;
+    private LoginContract.Presenter mPresenter;
 
-    EditText etUsername;
-    EditText etPassword;
-    Button btnLogin;
+    private EditText mEdtEmail;
+    private EditText mEtdPassword;
+    private Button mBtnLogin;
 
-    ProgressDialog pd;
+    private ProgressDialog mProgressDialog;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        mLoginDataSource = new LoginRepository();
-
-        init();
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
-
-                mLoginPresenter.callLogin(new Login(username, password));
-            }
-        });
-    }
-
     public int getLayout() {
         return R.layout.activity_login;
     }
 
+    @Override
     public void init() {
-        etUsername = findViewById(R.id.et_username);
-        etPassword = findViewById(R.id.et_password);
-        btnLogin = findViewById(R.id.btn_login);
-        mLoginPresenter = new LoginPresenter(this);
+        UserRepository userRepository =
+                UserRepository.getInstance(UserLocalDataSource.getInstance(),
+                        UserRemoteDataSource.getInstance());
+        mPresenter = new LoginPresenter(userRepository);
+        mPresenter.setView(this);
+
+        mProgressDialog = new ProgressDialog(this);
+
+        mEdtEmail = findViewById(R.id.edt_email);
+        mEtdPassword = findViewById(R.id.edt_password);
+        mBtnLogin = findViewById(R.id.btn_login);
+
+        mBtnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String username = mEdtEmail.getText().toString();
+                String password = mEtdPassword.getText().toString();
+                if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+                    return;
+                }
+                mPresenter.doLogin(username, password);
+            }
+        });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mPresenter.subscribe();
+    }
 
+    @Override
+    protected void onStop() {
+        mPresenter.unsubscribe();
+        super.onStop();
+    }
+
+    @Override
     public void showLoading() {
-        pd = new ProgressDialog(this);
-        pd.setMessage("loading");
-        pd.show();
+        mProgressDialog.setMessage(getString(R.string.msg_loading));
+        mProgressDialog.show();
     }
 
-
+    @Override
     public void hideLoading() {
-        pd.hide();
-        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+        mProgressDialog.hide();
     }
 
-
-    public void loginSuccess(String msg) {
-
+    @Override
+    public void onLoginSuccess(User user) {
+        String message = user.getName();
+        if (StringUtils.isBlank(message)) {
+            return;
+        }
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-
-    public void loginFailure(String errMsg) {
-
-    }
-
-
-    public void setPresenter(LoginContract.Presenter presenter) {
-
+    @Override
+    public void onLoginError(Throwable throwable) {
+        Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }
