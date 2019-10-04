@@ -2,6 +2,7 @@ package com.example.exercise01.login;
 
 import com.example.exercise01.base.BasePresenter;
 import com.example.exercise01.base.BaseView;
+import com.example.exercise01.data.Login;
 
 public interface LoginContract {
     interface View extends BaseView<Presenter>{
@@ -12,6 +13,6 @@ public interface LoginContract {
     }
 
     interface Presenter extends BasePresenter {
-        void callLogin(String username, String password);
+        void callLogin(Login login);
     }
 }

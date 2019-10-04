@@ -1,22 +1,31 @@
 package com.example.exercise01.login;
 
-import android.app.Activity;
+import android.os.Handler;
 
 import com.example.exercise01.data.Login;
-import com.example.exercise01.data.LoginRepositoryImpl;
+import com.example.exercise01.data.LoginRepository;
 
 public class LoginPresenter implements LoginContract.Presenter {
-    LoginActivity mLoginActivity;
+    LoginContract.View mLoginView;
+    LoginRepository mLoginRepository;
 
-    public LoginPresenter(LoginActivity loginActivity) {
-        mLoginActivity = loginActivity;
+    public LoginPresenter(LoginContract.View loginView) {
+        mLoginView = loginView;
+        mLoginRepository = new LoginRepository();
     }
 
     @Override
-    public void callLogin(String username, String password) {
-        LoginRepositoryImpl loginRepository = new LoginRepositoryImpl(this);
-        Login login = new Login(username, password);
-        loginRepository.doLogin(login);
+    public void callLogin(final Login login) {
+        mLoginView.showLoading();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mLoginRepository.doLogin(login);
+                mLoginView.hideLoading();
+            }
+        }, 1000);
+
     }
 
     @Override
@@ -27,9 +36,5 @@ public class LoginPresenter implements LoginContract.Presenter {
     @Override
     public void unsubscribe() {
 
-    }
-
-    public void loginPreCallback(){
-        mLoginActivity.hideLoading();
     }
 }

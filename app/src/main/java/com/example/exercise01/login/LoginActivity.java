@@ -12,10 +12,14 @@ import android.widget.Toast;
 
 import com.example.exercise01.R;
 import com.example.exercise01.base.BaseActivity;
+import com.example.exercise01.data.Login;
+import com.example.exercise01.data.LoginDataSource;
+import com.example.exercise01.data.LoginRepository;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View{
 
     private LoginPresenter mLoginPresenter;
+    private LoginRepository mLoginDataSource;
 
     EditText etUsername;
     EditText etPassword;
@@ -27,6 +31,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        mLoginDataSource = new LoginRepository();
 
         init();
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -35,8 +40,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
 
-                showLoading();
-                mLoginPresenter.callLogin(username, password);
+                mLoginPresenter.callLogin(new Login(username, password));
             }
         });
     }
