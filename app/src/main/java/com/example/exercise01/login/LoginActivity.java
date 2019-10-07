@@ -79,12 +79,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     @Override
-    public void onLoginSuccess(User user) {
-        String message = user.getName();
-        if (StringUtils.isBlank(message)) {
+    public void onLoginSuccess(String token) {
+        if (StringUtils.isBlank(token)) {
             return;
         }
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
     }
 
     @Override

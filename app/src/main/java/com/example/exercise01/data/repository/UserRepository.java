@@ -6,6 +6,7 @@ import com.example.exercise01.data.model.User;
 import com.example.exercise01.data.source.UserDataSource;
 import com.example.exercise01.data.source.local.UserLocalDataSource;
 import com.example.exercise01.data.source.remote.UserRemoteDataSource;
+import com.example.exercise01.data.source.remote.api.response.LoginResponse;
 import io.reactivex.Observable;
 
 public class UserRepository
@@ -40,7 +41,11 @@ public class UserRepository
     }
 
     @Override
-    public Observable<User> doLogin(String email, String password) {
+    public Observable<LoginResponse> doLogin(String email, String password) {
+        //Fake account nhu tren web
+        email = "eve.holt@reqres.in";
+        password = "cityslicka";
+
         return mRemoteDataSource.doLogin(email, password);
     }
 }

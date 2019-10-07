@@ -12,7 +12,7 @@ public interface LoginContract {
 
         void hideLoading();
 
-        void onLoginSuccess(User user);
+        void onLoginSuccess(String token);
 
         void onLoginError(Throwable throwable);
     }
