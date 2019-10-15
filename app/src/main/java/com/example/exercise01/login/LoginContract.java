@@ -2,7 +2,6 @@ package com.example.exercise01.login;
 
 import com.example.exercise01.base.BasePresenter;
 import com.example.exercise01.base.BaseView;
-import com.example.exercise01.data.model.User;
 
 public interface LoginContract {
 

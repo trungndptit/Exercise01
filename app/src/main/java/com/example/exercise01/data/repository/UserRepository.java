@@ -2,15 +2,20 @@ package com.example.exercise01.data.repository;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.example.exercise01.data.model.User;
 import com.example.exercise01.data.source.UserDataSource;
 import com.example.exercise01.data.source.local.UserLocalDataSource;
 import com.example.exercise01.data.source.remote.UserRemoteDataSource;
+import com.example.exercise01.data.source.remote.api.response.ApiResponse;
 import com.example.exercise01.data.source.remote.api.response.LoginResponse;
+
+import java.util.List;
+
 import io.reactivex.Observable;
 
 public class UserRepository
-        implements UserDataSource.RemoteDataSouce, UserDataSource.LocalDataSource {
+        implements UserDataSource.RemoteDataSource, UserDataSource.LocalDataSource {
 
     @NonNull
     private final UserRemoteDataSource mRemoteDataSource;
@@ -21,9 +26,9 @@ public class UserRepository
     @Nullable
     private static UserRepository INSTANCE;
 
-    private UserRepository(@NonNull UserLocalDataSource localDataSouce,
+    private UserRepository(@NonNull UserLocalDataSource localDataSource,
             @NonNull UserRemoteDataSource remoteDataSource) {
-        mLocalDataSouce = localDataSouce;
+        mLocalDataSouce = localDataSource;
         mRemoteDataSource = remoteDataSource;
     }
 
@@ -47,5 +52,10 @@ public class UserRepository
         password = "cityslicka";
 
         return mRemoteDataSource.doLogin(email, password);
+    }
+
+    @Override
+    public Observable<ApiResponse<List<User>>> getUserList() {
+        return mRemoteDataSource.getUserList();
     }
 }

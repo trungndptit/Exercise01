@@ -7,11 +7,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.example.exercise01.R;
 import com.example.exercise01.base.BaseActivity;
-import com.example.exercise01.data.model.User;
 import com.example.exercise01.data.repository.UserRepository;
 import com.example.exercise01.data.source.local.UserLocalDataSource;
 import com.example.exercise01.data.source.remote.UserRemoteDataSource;
+import com.example.exercise01.listUsers.ListUsersActivity;
 import com.example.exercise01.util.StringUtils;
+
+
 
 public class LoginActivity extends BaseActivity implements LoginContract.View {
 
@@ -84,6 +86,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             return;
         }
         Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
+        ListUsersActivity.getIntent(LoginActivity.this);
     }
 
     @Override

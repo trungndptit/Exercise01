@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Exercise01</string>
-    <string name="msg_loading">Loading...</string>
+    <string name="msg_loading">Loading…</string>
+
+    <string name="input_email">eve.holt@reqres.in</string>
+    <string name="input_password">cityslicka</string>
+
 </resources>

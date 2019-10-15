@@ -14,12 +14,14 @@
 
         <EditText
             android:hint="Email"
+            android:text="@string/input_email"
             android:id="@+id/edt_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <EditText
             android:hint="Password"
+            android:text="@string/input_password"
             android:id="@+id/edt_password"
             android:inputType="textPassword"
             android:layout_width="match_parent"
