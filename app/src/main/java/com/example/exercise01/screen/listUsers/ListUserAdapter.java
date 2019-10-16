@@ -1,6 +1,5 @@
-package com.example.exercise01.listUsers;
+package com.example.exercise01.screen.listUsers;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,54 +9,39 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.exercise01.R;
+import com.example.exercise01.base.recyclerView.BaseRecyclerViewAdapter;
 import com.example.exercise01.data.model.User;
+import com.example.exercise01.util.ViewUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ListUserAdapter extends
-        RecyclerView.Adapter<ListUserAdapter.ViewHolder>{
-
-    private List<User> mUsers = new ArrayList<>();
-
-    public ListUserAdapter() {
-    }
-
-    public void updateData(List<User> users) {
-        this.mUsers = users;
-        notifyDataSetChanged();
-    }
+public class ListUserAdapter extends BaseRecyclerViewAdapter<User, ListUserAdapter.ViewHolder> {
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, mItemClickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(mUsers.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return mUsers.size();
+        holder.bind(mDataList.get(position));
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         private TextView mTvEmail;
         private TextView mTvFirstName;
         private ImageView mIvAvatar;
 
-        public ViewHolder(@NonNull View itemView) {
+        private OnItemClickListener mListener;
+
+        public ViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
+            mListener = listener;
             mTvEmail = itemView.findViewById(R.id.tv_email);
             mTvFirstName = itemView.findViewById(R.id.tv_firstname);
             mIvAvatar = itemView.findViewById(R.id.iv_avatar);
-
         }
 
         public void bind(User user) {
@@ -66,10 +50,13 @@ public class ListUserAdapter extends
             }
             mTvEmail.setText(user.getEmail());
             mTvFirstName.setText(user.getName());
-            Glide.with(itemView.getContext())
-                    .load(user.getAvatar())
-                    .circleCrop()
-                    .into(mIvAvatar);
+            ViewUtils.loadCircleImage(user.getAvatar(), mIvAvatar);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onItemClicked(user);
+                }
+            });
         }
     }
 }

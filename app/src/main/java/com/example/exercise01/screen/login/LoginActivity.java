@@ -1,18 +1,17 @@
-package com.example.exercise01.login;
+package com.example.exercise01.screen.login;
 
-import android.app.ProgressDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.example.exercise01.R;
 import com.example.exercise01.base.BaseActivity;
 import com.example.exercise01.data.repository.UserRepository;
 import com.example.exercise01.data.source.local.UserLocalDataSource;
 import com.example.exercise01.data.source.remote.UserRemoteDataSource;
-import com.example.exercise01.listUsers.ListUsersActivity;
+import com.example.exercise01.screen.listUsers.ListUsersActivity;
 import com.example.exercise01.util.StringUtils;
-
 
 
 public class LoginActivity extends BaseActivity implements LoginContract.View {
@@ -23,7 +22,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     private EditText mEtdPassword;
     private Button mBtnLogin;
 
-    private ProgressDialog mProgressDialog;
 
     @Override
     public int getLayout() {
@@ -38,7 +36,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         mPresenter = new LoginPresenter(userRepository);
         mPresenter.setView(this);
 
-        mProgressDialog = new ProgressDialog(this);
 
         mEdtEmail = findViewById(R.id.edt_email);
         mEtdPassword = findViewById(R.id.edt_password);
@@ -67,17 +64,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     protected void onStop() {
         mPresenter.unsubscribe();
         super.onStop();
-    }
-
-    @Override
-    public void showLoading() {
-        mProgressDialog.setMessage(getString(R.string.msg_loading));
-        mProgressDialog.show();
-    }
-
-    @Override
-    public void hideLoading() {
-        mProgressDialog.hide();
     }
 
     @Override

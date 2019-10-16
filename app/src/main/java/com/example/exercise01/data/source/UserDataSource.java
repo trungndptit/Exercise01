@@ -17,7 +17,9 @@ public interface UserDataSource {
 
         Observable<LoginResponse> doLogin(String email, String password);
 
-        Observable<ApiResponse<List<User>>> getUserList();
+        Observable<ApiResponse<List<User>>> getUserList(int page);
+
+        Observable<ApiResponse<User>> getUserDetail(int userID);
     }
 
     /**

@@ -1,13 +1,16 @@
-package com.example.exercise01.login;
+package com.example.exercise01.screen.login;
 
 import com.example.exercise01.data.repository.UserRepository;
 import com.example.exercise01.data.source.remote.api.response.LoginResponse;
 import com.example.exercise01.util.LogUtils;
+import com.example.exercise01.util.StringUtils;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class LoginPresenter implements LoginContract.Presenter {
@@ -45,6 +48,12 @@ public class LoginPresenter implements LoginContract.Presenter {
         mView.showLoading();
 
         Disposable disposable = mUserRepository.doLogin(email, password)
+                .map(new Function<LoginResponse, String>() {
+                    @Override
+                    public String apply(LoginResponse loginResponse) throws Exception {
+                        return loginResponse.getToken();
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(new Action() {
@@ -53,10 +62,13 @@ public class LoginPresenter implements LoginContract.Presenter {
                         mView.hideLoading();
                     }
                 })
-                .subscribe(new Consumer<LoginResponse>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void accept(LoginResponse loginResponse) throws Exception {
-                        mView.onLoginSuccess(loginResponse.getToken());
+                    public void accept(String token) throws Exception {
+                        if (StringUtils.isBlank(token)) {
+                            return;
+                        }
+                        mView.onLoginSuccess(token);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

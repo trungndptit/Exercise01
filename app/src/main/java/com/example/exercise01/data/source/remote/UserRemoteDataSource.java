@@ -2,7 +2,6 @@ package com.example.exercise01.data.source.remote;
 
 import androidx.annotation.Nullable;
 
-import com.example.exercise01.BuildConfig;
 import com.example.exercise01.data.model.User;
 import com.example.exercise01.data.source.UserDataSource;
 import com.example.exercise01.data.source.remote.api.response.ApiResponse;
@@ -38,7 +37,12 @@ public class UserRemoteDataSource implements UserDataSource.RemoteDataSource {
     }
 
     @Override
-    public Observable<ApiResponse<List<User>>> getUserList() {
-        return mAppApi.getUserList(BuildConfig.QUERY_PAGE);
+    public Observable<ApiResponse<List<User>>> getUserList(int page) {
+        return mAppApi.getUserList(page);
+    }
+
+    @Override
+    public Observable<ApiResponse<User>> getUserDetail(int userID) {
+        return mAppApi.getDetailUser(userID);
     }
 }
