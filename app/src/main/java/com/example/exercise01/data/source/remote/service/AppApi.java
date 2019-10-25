@@ -11,6 +11,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface AppApi {
@@ -18,8 +19,11 @@ public interface AppApi {
     @FormUrlEncoded
     @POST("/api/login")
     Observable<LoginResponse> login(@Field("email") String email,
-            @Field("password") String password);
+                                    @Field("password") String password);
 
     @GET("/api/users")
-    Observable<ApiResponse<List<User>>> getUserList(@Query("page") String page);
+    Observable<ApiResponse<List<User>>> getUserList(@Query("page") int page);
+
+    @GET("/api/users/{id}")
+    Observable<ApiResponse<User>> getDetailUser(@Path("id") int userID);
 }

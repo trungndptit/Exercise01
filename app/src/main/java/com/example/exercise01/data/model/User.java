@@ -7,6 +7,10 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
+    @SerializedName("id")
+    @Expose
+    private int mId;
+
     @SerializedName("email")
     @Expose
     private String mEmail;
@@ -14,6 +18,10 @@ public class User implements Serializable {
     @SerializedName("first_name")
     @Expose
     private String mName;
+
+    @SerializedName("last_name")
+    @Expose
+    private String mLastName;
 
     @SerializedName("avatar")
     @Expose
@@ -44,5 +52,21 @@ public class User implements Serializable {
 
     public void setAvatar(String avatar) {
         mAvatar = avatar;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
+    }
+
+    public String getLastName() {
+        return mLastName;
+    }
+
+    public void setLastName(String lastName) {
+        mLastName = lastName;
     }
 }

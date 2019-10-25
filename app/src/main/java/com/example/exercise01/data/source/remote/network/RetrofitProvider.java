@@ -9,7 +9,9 @@ import com.example.exercise01.data.source.remote.service.AppApi;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import java.util.concurrent.TimeUnit;
+
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -29,13 +31,6 @@ public class RetrofitProvider {
 
     private Retrofit mRetrofit;
 
-    public static synchronized RetrofitProvider getInstance() {
-        if (sInstance == null) {
-            sInstance = new RetrofitProvider();
-        }
-        return sInstance;
-    }
-
     private RetrofitProvider() {
         Gson gson = getConfigGson();
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder().baseUrl(BASE_URL)
@@ -45,6 +40,13 @@ public class RetrofitProvider {
         mRetrofit = retrofitBuilder.build();
 
         mAppApi = mRetrofit.create(AppApi.class);
+    }
+
+    public static synchronized RetrofitProvider getInstance() {
+        if (sInstance == null) {
+            sInstance = new RetrofitProvider();
+        }
+        return sInstance;
     }
 
     private Gson getConfigGson() {

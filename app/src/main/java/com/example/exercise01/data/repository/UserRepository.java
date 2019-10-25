@@ -17,17 +17,15 @@ import io.reactivex.Observable;
 public class UserRepository
         implements UserDataSource.RemoteDataSource, UserDataSource.LocalDataSource {
 
+    @Nullable
+    private static UserRepository INSTANCE;
     @NonNull
     private final UserRemoteDataSource mRemoteDataSource;
-
     @NonNull
     private final UserLocalDataSource mLocalDataSouce;
 
-    @Nullable
-    private static UserRepository INSTANCE;
-
     private UserRepository(@NonNull UserLocalDataSource localDataSource,
-            @NonNull UserRemoteDataSource remoteDataSource) {
+                           @NonNull UserRemoteDataSource remoteDataSource) {
         mLocalDataSouce = localDataSource;
         mRemoteDataSource = remoteDataSource;
     }
@@ -55,7 +53,12 @@ public class UserRepository
     }
 
     @Override
-    public Observable<ApiResponse<List<User>>> getUserList() {
-        return mRemoteDataSource.getUserList();
+    public Observable<ApiResponse<List<User>>> getUserList(int page) {
+        return mRemoteDataSource.getUserList(page);
+    }
+
+    @Override
+    public Observable<ApiResponse<User>> getUserDetail(int userID) {
+        return mRemoteDataSource.getUserDetail(userID);
     }
 }
