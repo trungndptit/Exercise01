@@ -31,7 +31,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @Override
     public void init() {
         UserRepository userRepository =
-                UserRepository.getInstance(UserLocalDataSource.getInstance(),
+                UserRepository.getInstance(UserLocalDataSource.getInstance(this),
                         UserRemoteDataSource.getInstance());
         mPresenter = new LoginPresenter(userRepository);
         mPresenter.setView(this);

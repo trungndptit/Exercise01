@@ -42,7 +42,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailContra
 
     @Override
     public void init() {
-        UserRepository userRepository = UserRepository.getInstance(UserLocalDataSource.getInstance(),
+        UserRepository userRepository = UserRepository.getInstance(UserLocalDataSource.getInstance(this),
                 UserRemoteDataSource.getInstance());
         mPresenter = new UserDetailPresenter(userRepository);
         mPresenter.setView(this);
