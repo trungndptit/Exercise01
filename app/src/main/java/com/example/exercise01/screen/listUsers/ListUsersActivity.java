@@ -42,7 +42,7 @@ public class ListUsersActivity extends BaseActivity implements ListUserContract.
     public void init() {
 
         UserRepository userRepository =
-                UserRepository.getInstance(UserLocalDataSource.getInstance(),
+                UserRepository.getInstance(UserLocalDataSource.getInstance(this),
                         UserRemoteDataSource.getInstance());
         mPresenter = new ListUserPresenter(userRepository);
         mPresenter.setView(this);
