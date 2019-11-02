@@ -4,8 +4,8 @@ import android.content.Context;
 
 import androidx.annotation.Nullable;
 
-import com.example.exercise01.data.model.User;
 import com.example.exercise01.data.source.UserDataSource;
+import com.example.exercise01.data.source.local.sharePrf.SharedPrefsImpl;
 
 import java.util.List;
 
@@ -18,9 +18,11 @@ public class UserLocalDataSource implements UserDataSource.LocalDataSource {
     private static UserLocalDataSource INSTANCE;
 
     private UserDao mUserDao;
+    private SharedPrefsImpl mSharedPrefs;
 
     public UserLocalDataSource(Context context){
         mUserDao = UserDatabase.getInstance(context).userDao();
+        mSharedPrefs = SharedPrefsImpl.getInstance(context);
     }
 
     public static synchronized UserLocalDataSource getInstance(Context context) {
@@ -31,12 +33,17 @@ public class UserLocalDataSource implements UserDataSource.LocalDataSource {
     }
 
     @Override
-    public Flowable<List<UserEntity>> getUserList() {
-        return null;
+    public Flowable<List<UserEntity>> getFavoriteUserList() {
+        return mUserDao.getUserList();
     }
 
     @Override
-    public Completable insertOrUpdateUser(User user) {
-        return null;
+    public Completable insertOrUpdateFavoriteUser(UserEntity userEntity) {
+        return mUserDao.insertUser(userEntity);
+    }
+
+    @Override
+    public void putFavUserID() {
+
     }
 }

@@ -73,6 +73,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         }
         Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
         ListUsersActivity.getIntent(LoginActivity.this);
+        finish();
     }
 
     @Override

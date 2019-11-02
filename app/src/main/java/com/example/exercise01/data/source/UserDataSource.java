@@ -29,8 +29,10 @@ public interface UserDataSource {
      * LocalData For User
      */
     interface LocalDataSource {
-        Flowable<List<UserEntity>> getUserList();
+        Flowable<List<UserEntity>> getFavoriteUserList();
 
-        Completable insertOrUpdateUser(User user);
+        Completable insertOrUpdateFavoriteUser(UserEntity userEntity);
+
+        void putFavUserID();
     }
 }

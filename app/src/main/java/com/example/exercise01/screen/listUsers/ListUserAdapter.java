@@ -1,5 +1,6 @@
 package com.example.exercise01.screen.listUsers;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,12 @@ import com.example.exercise01.data.model.User;
 import com.example.exercise01.util.ViewUtils;
 
 public class ListUserAdapter extends BaseRecyclerViewAdapter<User, ListUserAdapter.ViewHolder> {
+
+    private static boolean mIsFavoriteUser;
+
+    public void setIsFavoriteUser(Boolean isFavoriteUser){
+        mIsFavoriteUser = isFavoriteUser;
+    }
 
     @NonNull
     @Override
@@ -33,6 +40,7 @@ public class ListUserAdapter extends BaseRecyclerViewAdapter<User, ListUserAdapt
         private TextView mTvEmail;
         private TextView mTvFirstName;
         private ImageView mIvAvatar;
+        private ImageView mIvFavorite;
 
         private OnItemClickListener mListener;
 
@@ -42,6 +50,7 @@ public class ListUserAdapter extends BaseRecyclerViewAdapter<User, ListUserAdapt
             mTvEmail = itemView.findViewById(R.id.tv_email);
             mTvFirstName = itemView.findViewById(R.id.tv_firstname);
             mIvAvatar = itemView.findViewById(R.id.iv_avatar);
+            mIvFavorite = itemView.findViewById(R.id.iv_favorite);
         }
 
         public void bind(User user) {
@@ -50,11 +59,21 @@ public class ListUserAdapter extends BaseRecyclerViewAdapter<User, ListUserAdapt
             }
             mTvEmail.setText(user.getEmail());
             mTvFirstName.setText(user.getName());
+            if (mIsFavoriteUser){
+                mIvFavorite.setImageResource(R.drawable.ic_favorite_user);
+            }
             ViewUtils.loadCircleImage(user.getAvatar(), mIvAvatar);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mListener.onItemClicked(user);
+                }
+            });
+
+            mIvFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onFavoriteClicked(user);
                 }
             });
         }

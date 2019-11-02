@@ -2,11 +2,13 @@ package com.example.exercise01.screen.listUsers;
 
 import com.example.exercise01.data.model.User;
 import com.example.exercise01.data.repository.UserRepository;
+import com.example.exercise01.data.source.local.UserEntity;
 import com.example.exercise01.data.source.remote.api.response.ApiResponse;
 import com.example.exercise01.util.Constant;
 
 import java.util.List;
 
+import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -64,6 +66,39 @@ public class ListUserPresenter implements ListUserContract.presenter {
                 });
         mCompositeDisposable.add(disposable);
     }
+
+    @Override
+    public void getFavUserList() {
+    }
+
+    @Override
+    public void saveFavoriteUser(UserEntity userEntity) {
+        Disposable disposable =
+                mUserRepository.insertOrUpdateFavoriteUser(userEntity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mView.onInsertFavoriteUserSuccess();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        if (throwable == null) {
+                            return;
+                        }
+                        mView.onGetError(throwable.getMessage());
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void saveFavoriteUserSharedPrefs(int id) {
+
+    }
+
 
     @Override
     public void setView(ListUserContract.view view) {

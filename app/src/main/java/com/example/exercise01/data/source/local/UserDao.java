@@ -16,5 +16,5 @@ public interface UserDao {
     Flowable<List<UserEntity>> getUserList();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Completable insertUser(UserEntity user);
+    Completable insertUser(UserEntity userEntity);
 }

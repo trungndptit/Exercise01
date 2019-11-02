@@ -1,5 +1,6 @@
 package com.example.exercise01.data.model;
 
+import com.example.exercise01.data.source.local.UserEntity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -28,6 +29,14 @@ public class User implements Serializable {
     private String mAvatar;
 
     public User() {
+    }
+
+    public User(UserEntity userEntity){
+        setId(userEntity.getId());
+        setEmail(userEntity.getEmail());
+        setName(userEntity.getName());
+        setLastName(userEntity.getLastName());
+        setAvatar(userEntity.getAvatar());
     }
 
     public String getEmail() {

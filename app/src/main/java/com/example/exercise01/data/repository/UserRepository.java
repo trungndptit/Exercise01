@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 
 import com.example.exercise01.data.model.User;
 import com.example.exercise01.data.source.UserDataSource;
+import com.example.exercise01.data.source.local.UserEntity;
 import com.example.exercise01.data.source.local.UserLocalDataSource;
 import com.example.exercise01.data.source.remote.UserRemoteDataSource;
 import com.example.exercise01.data.source.remote.api.response.ApiResponse;
@@ -12,6 +13,8 @@ import com.example.exercise01.data.source.remote.api.response.LoginResponse;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 public class UserRepository
@@ -61,4 +64,21 @@ public class UserRepository
     public Observable<ApiResponse<User>> getUserDetail(int userID) {
         return mRemoteDataSource.getUserDetail(userID);
     }
+
+    @Override
+    public Flowable<List<UserEntity>> getFavoriteUserList() {
+        return mLocalDataSouce.getFavoriteUserList();
+    }
+
+    @Override
+    public Completable insertOrUpdateFavoriteUser(UserEntity userEntity) {
+        return mLocalDataSouce.insertOrUpdateFavoriteUser(userEntity);
+    }
+
+    @Override
+    public void putFavUserID() {
+
+    }
+
+
 }

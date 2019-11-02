@@ -2,7 +2,12 @@ package com.example.exercise01.screen.listUsers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,8 +16,10 @@ import com.example.exercise01.base.BaseActivity;
 import com.example.exercise01.base.recyclerView.BaseRecyclerViewAdapter;
 import com.example.exercise01.data.model.User;
 import com.example.exercise01.data.repository.UserRepository;
+import com.example.exercise01.data.source.local.UserEntity;
 import com.example.exercise01.data.source.local.UserLocalDataSource;
 import com.example.exercise01.data.source.remote.UserRemoteDataSource;
+import com.example.exercise01.screen.favoriteUser.FavoriteUserActivity;
 import com.example.exercise01.screen.userDetail.UserDetailActivity;
 import com.example.exercise01.util.LogUtils;
 
@@ -64,9 +71,37 @@ public class ListUsersActivity extends BaseActivity implements ListUserContract.
     }
 
     @Override
+    public void onGetFavUserList(List<User> users) {
+
+    }
+
+    @Override
+    public void onInsertFavoriteUserSuccess() {
+        Toast.makeText(this, "Saved into the Favorite list", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     protected void onStop() {
         mPresenter.unsubscribe();
         super.onStop();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.exercise_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.item_fav_user:
+                Intent intent = FavoriteUserActivity.getIntent(ListUsersActivity.this);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -75,4 +110,12 @@ public class ListUsersActivity extends BaseActivity implements ListUserContract.
         startActivity(intent);
         LogUtils.d(TAG, mUser.getId() + "");
     }
+
+    @Override
+    public void onFavoriteClicked(User mUser) {
+        mPresenter.saveFavoriteUser(new UserEntity(mUser.getId(), mUser.getEmail(), mUser.getName(), mUser.getLastName(), mUser.getAvatar()));
+
+    }
+
+
 }

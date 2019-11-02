@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".screen.userDetail.UserDetailActivity"></activity>
+        <activity android:name=".screen.favoriteUser.FavoriteUserActivity"></activity>
+        <activity android:name=".screen.userDetail.UserDetailActivity" />
         <activity android:name=".screen.listUsers.ListUsersActivity" />
         <activity android:name=".screen.login.LoginActivity">
             <intent-filter>

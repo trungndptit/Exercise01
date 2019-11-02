@@ -62,5 +62,6 @@ public abstract class BaseRecyclerViewAdapter<T, V extends RecyclerView.ViewHold
 
     public interface OnItemClickListener<T> {
         void onItemClicked(T item);
+        void onFavoriteClicked(T item);
     }
 }
