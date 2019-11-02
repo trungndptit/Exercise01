@@ -27,6 +27,8 @@ public class User implements Serializable {
     @Expose
     private String mAvatar;
 
+    private boolean mIsFavoriteUser;
+
     public User() {
     }
 
@@ -68,5 +70,13 @@ public class User implements Serializable {
 
     public void setLastName(String lastName) {
         mLastName = lastName;
+    }
+
+    public boolean getFavoriteUser() {
+        return mIsFavoriteUser;
+    }
+
+    public void setFavoriteUser(boolean favoriteUser) {
+        mIsFavoriteUser = favoriteUser;
     }
 }

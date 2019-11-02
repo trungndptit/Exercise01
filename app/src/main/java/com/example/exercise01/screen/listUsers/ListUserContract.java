@@ -8,10 +8,16 @@ import java.util.List;
 
 public interface ListUserContract {
     interface view extends BaseView {
+
         void onGetUserListSuccess(List<User> users);
+
+        void onSaveFavoriteUserSuccess();
     }
 
     interface presenter extends BasePresenter<ListUserContract.view> {
-        void getUserList();
+
+        void getUserListApi();
+
+        void saveFavoriteUser(User user);
     }
 }

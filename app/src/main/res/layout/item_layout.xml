@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center"
+    android:weightSum="1"
     android:layout_margin="@dimen/dp_10"
     android:orientation="horizontal">
 
@@ -12,7 +14,8 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:gravity="center"
         android:layout_height="wrap_content">
         <TextView
@@ -31,4 +34,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_marginHorizontal="@dimen/dp_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_non_favorite"
+            android:visibility="gone"
+            android:background="@drawable/ic_non_favorite"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30" />
+        <ImageView
+            android:id="@+id/iv_favorite"
+            android:background="@drawable/ic_favorite"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30" />
+    </RelativeLayout>
+
+
 </LinearLayout>

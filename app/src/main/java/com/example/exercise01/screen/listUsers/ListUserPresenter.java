@@ -7,12 +7,13 @@ import com.example.exercise01.util.Constant;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class ListUserPresenter implements ListUserContract.presenter {
@@ -27,17 +28,30 @@ public class ListUserPresenter implements ListUserContract.presenter {
         mCompositeDisposable = new CompositeDisposable();
     }
 
+    private List<User> getUserList(List<User> users, List<User> userEntities) {
+        for (User user : users) {
+            for (User userEntity : userEntities) {
+                if (user.getId() == userEntity.getId()) {
+                    user.setFavoriteUser(true);
+                }
+            }
+        }
+
+        return users;
+    }
+
     @Override
-    public void getUserList() {
+    public void getUserListApi() {
         mView.showLoading();
-        Disposable disposable = mUserRepository.getUserList(Constant.PAGE_REQUEST)
-                .map(new Function<ApiResponse<List<User>>, List<User>>() {
+        Disposable disposable = Observable.zip(mUserRepository.getUserList(Constant.PAGE_REQUEST),
+                mUserRepository.getFavoriteUserList().toObservable(),
+                new BiFunction<ApiResponse<List<User>>, List<User>, List<User>>() {
                     @Override
-                    public List<User> apply(ApiResponse<List<User>> listApiResponse) throws Exception {
+                    public List<User> apply(ApiResponse<List<User>> listApiResponse, List<User> userEntities) throws Exception {
+                        getUserList(listApiResponse.getData(), userEntities);
                         return listApiResponse.getData();
                     }
-                })
-                .subscribeOn(Schedulers.io())
+                }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(new Action() {
                     @Override
@@ -52,6 +66,29 @@ public class ListUserPresenter implements ListUserContract.presenter {
                             return;
                         }
                         mView.onGetUserListSuccess(users);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        if (throwable == null){
+                            return;
+                        }
+                        mView.onGetError(throwable.getMessage());
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void saveFavoriteUser(User user) {
+        Disposable disposable =
+                mUserRepository.insertOrUpdateFavoriteUser(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mView.onSaveFavoriteUserSuccess();
                     }
                 }, new Consumer<Throwable>() {
                     @Override

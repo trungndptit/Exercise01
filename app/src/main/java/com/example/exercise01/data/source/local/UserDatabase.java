@@ -13,17 +13,15 @@ public abstract class UserDatabase extends RoomDatabase {
 
     private static volatile UserDatabase INSTANCE;
 
-    public abstract UserDao userDao();
-
     public static UserDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (UserDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context
-                                    , UserDatabase.class
-                                    , DB_NAME)
-                                    .allowMainThreadQueries()
-                                    .build();
+                            , UserDatabase.class
+                            , DB_NAME)
+                            .allowMainThreadQueries()
+                            .build();
                 }
             }
         }
@@ -33,4 +31,6 @@ public abstract class UserDatabase extends RoomDatabase {
     public static void destroyInstance() {
         INSTANCE = null;
     }
+
+    public abstract UserDao userDao();
 }

@@ -7,10 +7,12 @@ import androidx.annotation.Nullable;
 import com.example.exercise01.data.model.User;
 import com.example.exercise01.data.source.UserDataSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.functions.Function;
 
 public class UserLocalDataSource implements UserDataSource.LocalDataSource {
 
@@ -31,12 +33,23 @@ public class UserLocalDataSource implements UserDataSource.LocalDataSource {
     }
 
     @Override
-    public Flowable<List<UserEntity>> getUserList() {
-        return null;
+    public Flowable<List<User>> getFavoriteUserList() {
+        return mUserDao.getUserList().map(new Function<List<UserEntity>, List<User>>() {
+            @Override
+            public List<User> apply(List<UserEntity> userEntities) throws Exception {
+                List<User> users = new ArrayList<>();
+                for (UserEntity userEntity : userEntities) {
+                    User user = userEntity.userFromEntity();
+                    users.add(user);
+                }
+                return users;
+            }
+        });
     }
 
     @Override
-    public Completable insertOrUpdateUser(User user) {
-        return null;
+    public Completable insertOrUpdateFavoriteUser(User user) {
+        UserEntity userEntity = new UserEntity().userToEntity(user);
+        return mUserDao.insertUser(userEntity);
     }
 }

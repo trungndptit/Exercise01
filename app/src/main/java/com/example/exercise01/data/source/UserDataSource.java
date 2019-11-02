@@ -1,7 +1,6 @@
 package com.example.exercise01.data.source;
 
 import com.example.exercise01.data.model.User;
-import com.example.exercise01.data.source.local.UserEntity;
 import com.example.exercise01.data.source.remote.api.response.ApiResponse;
 import com.example.exercise01.data.source.remote.api.response.LoginResponse;
 
@@ -29,8 +28,9 @@ public interface UserDataSource {
      * LocalData For User
      */
     interface LocalDataSource {
-        Flowable<List<UserEntity>> getUserList();
+        Flowable<List<User>> getFavoriteUserList();
 
-        Completable insertOrUpdateUser(User user);
+        Completable insertOrUpdateFavoriteUser(User user);
+
     }
 }

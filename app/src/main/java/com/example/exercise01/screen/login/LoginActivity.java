@@ -1,5 +1,6 @@
 package com.example.exercise01.screen.login;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +12,7 @@ import com.example.exercise01.data.repository.UserRepository;
 import com.example.exercise01.data.source.local.UserLocalDataSource;
 import com.example.exercise01.data.source.remote.UserRemoteDataSource;
 import com.example.exercise01.screen.listUsers.ListUsersActivity;
+import com.example.exercise01.util.ActivityUtils;
 import com.example.exercise01.util.StringUtils;
 
 
@@ -21,7 +23,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     private EditText mEdtEmail;
     private EditText mEtdPassword;
     private Button mBtnLogin;
-
 
     @Override
     public int getLayout() {
@@ -35,7 +36,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                         UserRemoteDataSource.getInstance());
         mPresenter = new LoginPresenter(userRepository);
         mPresenter.setView(this);
-
 
         mEdtEmail = findViewById(R.id.edt_email);
         mEtdPassword = findViewById(R.id.edt_password);
@@ -72,7 +72,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             return;
         }
         Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
-        ListUsersActivity.getIntent(LoginActivity.this);
+        Intent intent = ListUsersActivity.getIntent(LoginActivity.this);
+        ActivityUtils.startActivityAtRoot(this, intent);
     }
 
     @Override

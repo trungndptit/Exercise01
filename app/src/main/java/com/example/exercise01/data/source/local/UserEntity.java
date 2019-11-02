@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.example.exercise01.data.model.User;
+
 @Entity(tableName = "USER_DB")
 public class UserEntity {
 
@@ -25,15 +27,19 @@ public class UserEntity {
     @ColumnInfo(name = "avatar")
     private String mAvatar;
 
+    @ColumnInfo(name = "isFavoriteUser")
+    private boolean mIsFavoriteUser;
+
     public UserEntity() {
     }
 
-    public UserEntity(int id, String email, String name, String lastName, String avatar) {
+    public UserEntity(int id, String email, String name, String lastName, String avatar, boolean  isFavoriteUser) {
         mId = id;
         mEmail = email;
         mName = name;
         mLastName = lastName;
         mAvatar = avatar;
+        mIsFavoriteUser = isFavoriteUser;
     }
 
     public int getId() {
@@ -74,5 +80,26 @@ public class UserEntity {
 
     public void setAvatar(String avatar) {
         mAvatar = avatar;
+    }
+
+    public UserEntity userToEntity(User user){
+        this.mId = user.getId();
+        this.mName = user.getName();
+        this.mEmail = user.getEmail();
+        this.mLastName = user.getLastName();
+        this.mAvatar = user.getAvatar();
+        this.mIsFavoriteUser = user.getFavoriteUser();
+        return this;
+    }
+
+    public User userFromEntity(){
+        User user = new User();
+        user.setId(this.mId);
+        user.setEmail(this.mEmail);
+        user.setName(this.mName);
+        user.setLastName(this.mLastName);
+        user.setAvatar(this.mAvatar);
+        user.setFavoriteUser(this.mIsFavoriteUser);
+        return user;
     }
 }

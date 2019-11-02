@@ -12,6 +12,8 @@ import com.example.exercise01.data.source.remote.api.response.LoginResponse;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 public class UserRepository
@@ -22,11 +24,11 @@ public class UserRepository
     @NonNull
     private final UserRemoteDataSource mRemoteDataSource;
     @NonNull
-    private final UserLocalDataSource mLocalDataSouce;
+    private final UserLocalDataSource mLocalDataSource;
 
     private UserRepository(@NonNull UserLocalDataSource localDataSource,
                            @NonNull UserRemoteDataSource remoteDataSource) {
-        mLocalDataSouce = localDataSource;
+        mLocalDataSource = localDataSource;
         mRemoteDataSource = remoteDataSource;
     }
 
@@ -61,4 +63,15 @@ public class UserRepository
     public Observable<ApiResponse<User>> getUserDetail(int userID) {
         return mRemoteDataSource.getUserDetail(userID);
     }
+
+    @Override
+    public Flowable<List<User>> getFavoriteUserList() {
+        return mLocalDataSource.getFavoriteUserList();
+    }
+
+    @Override
+    public Completable insertOrUpdateFavoriteUser(User user) {
+        return mLocalDataSource.insertOrUpdateFavoriteUser(user);
+    }
+
 }
